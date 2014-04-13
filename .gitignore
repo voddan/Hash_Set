@@ -3,3 +3,5 @@
 
 *.gch
 *.o
+*.backup
+*.out.*
