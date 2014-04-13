@@ -40,7 +40,7 @@ void Hash_List_Dump(const Hash_List* list) {
 		return;
 	}
 	
-	printf(" %2d, ", list->value);
+	printf(" '%s', ", list->value);
 	Hash_List_Dump(list->link);
 }
 

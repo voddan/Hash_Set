@@ -25,8 +25,17 @@
 #include "hash_set.h"
 
 #define ARRAY_LEN 9
-type_t array[ARRAY_LEN] = {78, 54, -1, -2, 54, 48, 13, 5, 54};
-
+type_t array[ARRAY_LEN] = {
+	"abc",
+	"23",
+	"5678",
+	"ab&",
+	"__DAN__",
+	"23",
+	"90",
+	"23",
+	"ab&"
+};
  
 int main() {
 	printf("started working..\n");
@@ -44,15 +53,17 @@ int main() {
 	// Hash_Set_find
 	for(int i = 0; i < ARRAY_LEN; i++) {
 		const type_t* t = Hash_Set_find(set, array[i]);
-		printf("find(%2d): %p  (%d)\n", array[i], t, (t)? *t : 0);
+		printf("find(%8s): %p  (%s)\n", array[i], t, (t)? *t : "--");
 	}
 	
-	// Hash_Set_find (random)
-	printf("--random--\n");
-	for(int i = 0; i < 10; i++) {
-		const type_t* t = Hash_Set_find(set, i);
-		printf("find(%2d): %p  (%d)\n", i, t, (t)? *t : 0);
+	printf("speed testing..\n");
+	#define SPEED_TEST_LOOP 100000
+	for(int j = 0; j < SPEED_TEST_LOOP; j++) {
+		for(int i = 0; i < ARRAY_LEN; i++) {
+			Hash_Set_find(set, array[i]);
+		}
 	}
+	printf("speed testing is finished\n");
 	
 	
 	Hash_Set_Del(set);
