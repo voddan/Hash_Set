@@ -62,7 +62,7 @@ void Hash_List_add(Hash_List* list, const type_t item) {
 }
 
 const type_t* Hash_List_find(Hash_List* list, const type_t item) {
-	assert(list);
+	//assert(list);
 	
 	while(list->link) {
 		if (item == list->value)
