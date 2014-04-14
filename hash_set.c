@@ -21,6 +21,7 @@
  **/
  
 #include <stdio.h>
+#include <string.h>
 
 #include "hash_set.h"
 
@@ -56,15 +57,14 @@ int main() {
 		printf("find(%8s): %p  (%s)\n", array[i], t, (t)? *t : "--");
 	}
 	
-	printf("speed testing..\n");
-	#define SPEED_TEST_LOOP 100000
-	for(int j = 0; j < SPEED_TEST_LOOP; j++) {
-		for(int i = 0; i < ARRAY_LEN; i++) {
-			Hash_Set_find(set, array[i]);
-		}
+	printf("\n");
+	for(int i = 0; i < ARRAY_LEN; i++) {
+		char str[20];
+		strcpy(str, array[i]);
+		strcat(str, "$");
+		const type_t* t = Hash_Set_find(set, str);
+		printf("find(%8s): %p  (%s)\n", str, t, (t)? *t : "--");
 	}
-	printf("speed testing is finished\n");
-	
 	
 	Hash_Set_Del(set);
 	

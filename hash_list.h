@@ -61,7 +61,21 @@ void Hash_List_add(Hash_List* list, const type_t item) {
 	}
 }
 
-const type_t* Hash_List_find(const Hash_List* list, const type_t item) {
+const type_t* Hash_List_find(Hash_List* list, const type_t item) {
+	assert(list);
+	
+	while(list->link) {
+		if (item == list->value)
+			return &(list->value);
+		else
+			list = list->link;
+	}
+	
+	return 0;
+}
+
+// recursive implementation; was too slow
+const type_t* Hash_List_find_1(const Hash_List* list, const type_t item) {
 	assert(list);
 	
 	if(list->link) {
