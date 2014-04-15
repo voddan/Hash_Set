@@ -38,6 +38,8 @@ type_t array[ARRAY_LEN] = {
 	"ab&"
 };
  
+ 
+ // to debug
 int main() {
 	printf("started working..\n");
 	
