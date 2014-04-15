@@ -71,52 +71,52 @@ const type_t* Hash_List_find(Hash_List* list, const type_t item) {
 		// rdi -> struct
 		// rsi -> str
 		
-		"	movq %%rsi, %%r9						\n"
-		// r9 -> str (begin)
-		"	movq %%rdi, %%rax						\n"
-		// r8 -> struct
-		"	cld						\n"
-		
-		/////////////////
-		"	movq (%%rax), %%rdx						\n"
+		"	movq %%rsi, %%r9			\n"
+		// r9 -> str (begin)                          
+		"	movq %%rdi, %%rax			\n"
+		// rax -> struct                               
+		"	cld					\n"
+		                                               
+		/////////////////                              
+		"	movq (%%rdi), %%rdx			\n"
 		// rdx == list->link
-		"	orq %%rdx, %%rdx						\n"
-		// if rdx == null
-		"	jz _return						\n"
-		// return 0
-		/////////////////
-		
-		"_big_loop:						\n"
-		
-		/////////////////
-		"	movq %%r9, %%rsi						\n"
-		// rsi -> str (begin)
-		"	addq $8, %%rax						\n"
-		"	movq (%%rax), %%rdi						\n"
-		// rdi -> (struct->val)  
-		// not shure !!!!
-		
-		// work bad with empty lines
-		"_cmp_loop:						\n"
-		"	cmpb $0, (%%rsi) 						\n"
-		"	jz _eol						\n"
-		"	cmpsb						\n"
-		"	je _cmp_loop						\n"
-		
-		
-		// (rdi) != (rsi)
-		"	movq %%rdx, %%rax						\n"
-		// list := list->link;
-		"	movq (%%rax), %%rdx						\n"
-		// rdx := list->link
-		"	orq %%rdx, %%rdx						\n"
-		// if rdx == null
-		"	jnz _big_loop						\n"
-		// return 0
-		"							\n"
-		"_return:							\n"
-		"	xorq %%rax, %%rax						\n"
-		// return 0
+		"	orq %%rdx, %%rdx			\n"
+		// if rdx == null                            
+		"	jz _return				\n"
+		// return 0                                     
+		/////////////////                               
+		                                               
+		"_big_loop:					\n"
+		                                               
+		/////////////////                              
+		"	movq %%r9, %%rsi			\n"
+		// rsi -> str (begin)                           
+		"	addq $8, %%rax				\n"
+		"	movq (%%rax), %%rdi			\n"
+		// rdi -> (struct->val)                         
+		// not shure !!!!                               
+		                                                
+		"_cmp_loop:					\n"
+		"	cmpb $0, (%%rsi) 			\n"
+		"	jz _eol					\n"
+			// slow jamp
+		"	cmpsb					\n"
+		"	je _cmp_loop				\n"
+		                                              
+		                                              
+		// (rdi) != (rsi)                             
+		"	movq %%rdx, %%rax			\n"
+		// list := list->link;                     
+		"	movq (%%rax), %%rdx			\n"
+		// rdx := list->link                          
+		"	orq %%rdx, %%rdx			\n"
+		// if rdx == null                             
+		"	jnz _big_loop				\n"
+		// return 0                                  
+		"						\n"
+		"_return:					\n"
+		"	xorq %%rax, %%rax			\n"
+		// return 0                                   
 		"_eol:						\n"
 		// (rdi) == 0
 	:"=a"(result) 		// fixed // -> string
