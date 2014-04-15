@@ -82,6 +82,80 @@ const type_t* Hash_List_find(Hash_List* list, const type_t item) {
 		// rdx == list->link
 		"	orq %%rdx, %%rdx			\n"
 		// if rdx == null                            
+		"	jz __return				\n"
+		// return 0                                     
+		/////////////////                               
+		                                               
+		"__big_loop:					\n"
+		                                               
+		/////////////////                              
+		"	movq %%r9, %%rsi			\n"
+		// rsi -> str (begin)                           
+		
+		
+		"	addq $8, %%rax				\n"
+		"	movq (%%rax), %%rdi			\n"
+	//	"	movq 8(%%rax), %%rdi			\n"
+			// why does not it work?
+		// rdi -> (struct->val)                         
+		// not shure !!!!                               
+		                                                
+		"__cmp_loop:					\n"
+		"						\n"
+		"	cmpsb					\n"
+		"	jne __next					\n"
+		"						\n"
+		"	cmpb $0, -1(%%rsi)					\n"
+		"	jne __cmp_loop					\n"
+		"						\n"
+		"	jmp __eol					\n"
+		"						\n"
+		                                              
+		"__next:					\n"
+		                                              
+		// (rdi) != (rsi)                             
+		"	movq %%rdx, %%rax			\n"
+		// list := list->link;                     
+		"	movq (%%rax), %%rdx			\n"
+		// rdx := list->link                          
+		"	orq %%rdx, %%rdx			\n"
+		// if rdx == null                             
+		"	jnz __big_loop				\n"
+		// return 0                                  
+		"						\n"
+		"__return:					\n"
+		"	xorq %%rax, %%rax			\n"
+		// return 0                                   
+		"__eol:						\n"
+		// (rdi) == 0
+	:"=a"(result) 		// fixed // -> string
+	:"D"(list), "S"(str) 	// fixed
+	: "r8", "r9", "rdx"
+	);
+	
+	return result;
+}
+
+const type_t* Hash_List_find_4(Hash_List* list, const type_t item) {
+	char* str = (char*) item;
+	type_t* result;
+	
+	
+	__asm__ volatile (
+		// rdi -> struct
+		// rsi -> str
+		
+		"	movq %%rsi, %%r9			\n"
+		// r9 -> str (begin)                          
+		"	movq %%rdi, %%rax			\n"
+		// rax -> struct                               
+		"	cld					\n"
+		                                               
+		/////////////////                              
+		"	movq (%%rdi), %%rdx			\n"
+		// rdx == list->link
+		"	orq %%rdx, %%rdx			\n"
+		// if rdx == null                            
 		"	jz _return				\n"
 		// return 0                                     
 		/////////////////                               
@@ -91,8 +165,12 @@ const type_t* Hash_List_find(Hash_List* list, const type_t item) {
 		/////////////////                              
 		"	movq %%r9, %%rsi			\n"
 		// rsi -> str (begin)                           
+		
+		
 		"	addq $8, %%rax				\n"
 		"	movq (%%rax), %%rdi			\n"
+	//	"	movq 8(%%rax), %%rdi			\n"
+			// why does not it work?
 		// rdi -> (struct->val)                         
 		// not shure !!!!                               
 		                                                
@@ -121,7 +199,7 @@ const type_t* Hash_List_find(Hash_List* list, const type_t item) {
 		// (rdi) == 0
 	:"=a"(result) 		// fixed // -> string
 	:"D"(list), "S"(str) 	// fixed
-	: "rbx", "r9", "rdx"
+	: "r9", "rdx"
 	);
 	
 	return result;
@@ -188,7 +266,7 @@ const type_t* Hash_List_find_3(Hash_List* list, const type_t item) {
 		"							\n"
 	:"=a"(result) 		// fixed // -> string
 	:"D"(list), "S"(str) 	// fixed
-	: "rbx", "r8", "r9", "rdx"
+	: "r8", "r9", "rdx"
 	);
 	
 	/*
